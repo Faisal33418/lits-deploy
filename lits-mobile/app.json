@@ -1,0 +1,50 @@
+{
+  "expo": {
+    "name": "Love In The Sky",
+    "slug": "lits-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#020617"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lits.loveinthesky",
+      "infoPlist": {
+        "NSCameraUsageDescription": "LITS needs camera access to take verification photos",
+        "NSPhotoLibraryUsageDescription": "LITS needs photo library access to upload verification documents"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#020617"
+      },
+      "package": "com.lits.loveinthesky",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "LITS needs photo access to upload verification documents",
+          "cameraPermission": "LITS needs camera access to take verification photos"
+        }
+      ]
+    ]
+  }
+}

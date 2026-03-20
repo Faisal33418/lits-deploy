@@ -1,0 +1,210 @@
+<analysis>**original_problem_statement:**
+The user wants to build a standalone dating application named Love In The Sky (LITS), exclusively for airline and airport employees. The app's core design principle is to cater to the unique lifestyle of aviation professionals, moving beyond a simple Tinder for crew model.
+
+**PRODUCT REQUIREMENTS:**
+- **Phase 1 (Core Features):**
+    - **Secure Airline Staff Verification:** Start with company email verification, with plans to add ID/badge scan and biometrics.
+    - **Inclusive Profiles:** Cater to all airline roles (pilots, flight attendants, ramp agents, mechanics, corporate staff, etc.). Profile fields should include , , , , , , and .
+    - **Authentication:** Standard email/password registration and Google OAuth.
+    - **Basic Dating Flow:** Profile creation, swipe-to-match, and chat.
+
+- **Phase 2 (Aviation-Specific Upgrades):**
+    - **Smart Schedule Matching:** Match users based on overlapping layovers and similar schedules.
+    - **AI Lifestyle Scoring:** Use AI (OpenAI) to generate compatibility scores based on aviation-specific lifestyle choices.
+    - **Base-to-Base Compatibility:** Show travel ease and distance between users' home bases.
+    - **Layover Social Mode:** A feature to find other crew members on a layover in the same city.
+
+- **Phase 3 (AI Travel & Monetization):**
+    - **Non-Rev Trip Matching:** AI-powered suggestions for trips two users can take together.
+    - **Admin Dashboard:** A panel for admins to review and manage manual user verifications.
+    - **Subscription Tiers:** A 3-tier pricing model (, , ) with premium features like Verified Matches Only filter.
+
+- **Phase 4 (Social Layer):**
+    - **Group Meetups & Events:** Social features for crew events and airline-specific groups.
+
+- **Technical Stack:**
+    - **Backend:** FastAPI, MongoDB
+    - **Frontend:** React, Tailwind CSS
+    - **Integrations:** OpenAI, Google OAuth, AWS S3 (for ID uploads).
+
+**User's preferred language**: English
+
+**what currently exists?**
+A full-stack application foundation has been built. The backend is a single  file containing FastAPI endpoints for user registration (JWT), profile creation, and placeholder endpoints for subscriptions and verification. The frontend consists of several React pages including a landing page, auth, profile setup, a discover page, a pricing page, a non-functional verification page, and a UI-only admin dashboard. The app has been branded Love In The Sky (LITS) and features a modern, glassmorphism design.
+
+**Last working item**:
+- **Last item agent was working**: The agent was tasked with implementing three major features simultaneously: Google OAuth login, AWS S3 integration for verification document uploads, and an Admin Dashboard for reviewing those verifications.
+- **Status**: IN PROGRESS
+- **Reasoning**: The implementation is incomplete and partially broken. The server failed to start due to an AWS S3 initialization error (likely missing credentials). The agent applied a temporary patch by making the storage optional, but this means the S3 upload functionality is not working. The Google OAuth backend routes were created, but the frontend is not integrated, and it lacks proper session key management. The Admin Dashboard is a UI-only page with no connection to backend data or actions.
+- **Agent Testing Done**: N
+- **Which testing method agent to use?**: both
+- **User Testing Done**: N
+
+**All Pending/In progress Issue list**:
+- **Issue 1**: AWS S3 integration is broken and non-functional. (P0)
+- **Issue 2**: Google OAuth integration is incomplete. (P1)
+- **Issue 3**: The Admin Dashboard is not functional and disconnected from the backend. (P1)
+
+**Issues Detail**:
+- **Issue 1: AWS S3 integration is broken**
+    - **Attempted fixes**: The agent's initial implementation caused the server to crash. A workaround was applied to make the storage initialization optional, but the file upload endpoint () still saves files to a local  directory instead of S3.
+    - **Next debug checklist**:
+        1.  Securely request , , and  from the user.
+        2.  Add these keys to  and restart the backend.
+        3.  In , fix the  client initialization to be robust.
+        4.  Rewrite the  endpoint to upload files directly to the S3 bucket.
+        5.  Implement the  endpoint to serve images from S3 for admin review.
+    - **Why fix this issue and what will be achieved with the fix?**: This is a critical blocker for the user's required Phase 2 (ID/Badge Scan) verification feature.
+    - **Status**: IN PROGRESS
+    - **Is recurring issue?**: N
+    - **Should Test frontend/backend/both after fix?**: backend
+    - **Blocked on other issue**: None (but requires user credentials).
+
+- **Issue 2: Google OAuth integration is incomplete**
+    - **Attempted fixes**:  was installed and backend routes (, ) were created in . However, the session middleware was configured without a , and the frontend has no UI to trigger the flow.
+    - **Next debug checklist**:
+        1.  Request  and  from the user.
+        2.  Generate and add a  to  for the session middleware.
+        3.  Add a Sign in with Google button to  that links to the login endpoint.
+        4.  Ensure the frontend correctly handles the callback, receives the JWT, and logs the user in.
+    - **Why fix this issue and what will be achieved with the fix?**: Fulfills the user's request for an alternative, convenient login method as part of Phase 1.
+    - **Status**: IN PROGRESS
+    - **Is recurring issue?**: N
+    - **Should Test frontend/backend/both after fix?**: both
+    - **Blocked on other issue**: None (but requires user credentials).
+
+- **Issue 3: The Admin Dashboard is not functional**
+    - **Attempted fixes**: A static UI was created at , and placeholder backend endpoints were added to . There is no data flow between them.
+    - **Next debug checklist**:
+        1.  In , use  to fetch pending verifications from .
+        2.  Implement Approve and Reject buttons that call the appropriate backend endpoints.
+        3.  Implement backend logic for fetching, approving, and rejecting verifications.
+        4.  Secure the admin route and endpoints with role-based access control.
+    - **Why fix this issue and what will be achieved with the fix?**: The dashboard is essential for managing the manual verification process, a core security feature.
+    - **Status**: IN PROGRESS
+    - **Is recurring issue?**: N
+    - **Should Test frontend/backend/both after fix?**: both
+    - **Blocked on other issue**: Issue 1 (AWS S3 integration).
+
+**In progress Task List**:
+- **Task 1: Implement 3-Phase Verification System**
+    - **Where to resume**: Start by requesting AWS and Google credentials from the user. Then, fix the blocking issues in order: AWS S3 (Issue 1), Google OAuth (Issue 2), and finally the Admin Dashboard (Issue 3).
+    - **What will be achieved with this?**: A complete, secure verification system with email, Google login, ID upload capabilities, and an admin review panel.
+    - **Status**: IN PROGRESS
+    - **Should Test frontend/backend/both after fix?**: both
+    - **Blocked on something**: User credentials for AWS and Google OAuth.
+
+**Upcoming and Future Tasks**
+- **Upcoming Tasks:**
+    - **P0: Implement Smart Schedule Matching**: Enhance the user model to store schedule data and create a backend algorithm to match users with overlapping layovers.
+    - **P1: Implement Verified Matches Only Filter**: Add a premium filter to the Discover page and connect it to the backend to filter results.
+    - **P2: Integrate Stripe for Subscriptions**: Implement full payment processing for the existing pricing tiers.
+    - **P3: AI-Powered Lifestyle Scoring**: Integrate OpenAI to generate and display compatibility scores on user profiles.
+
+- **Future Tasks:**
+    - **Non-Rev Trip Matching**: Build the AI feature to suggest trips.
+    - **Layover Social Mode**: Implement the real-time social feature for layovers.
+    - **Group Meetups & Events**: Add social networking features.
+    - **Biometrics Verification**: Integrate a 3rd party service for Phase 3 verification.
+
+**Completed work in this session**
+- **Initial Application Scaffolding**: Established the React frontend and FastAPI backend.
+- **Branding and UI**: Designed and implemented the Love In The Sky (LITS) brand with a modern UI across landing, auth, and profile pages.
+- **User Authentication and Profiles**: Implemented JWT-based registration and created extensive, inclusive profile models and forms for various airline roles.
+- **Pricing & Monetization Structure**: Defined a 3-tier pricing model, created the corresponding UI page, and implemented a basic backend swipe limit for free users.
+- **Documentation**: Created several markdown documents detailing strategy, roadmap, and branding.
+
+**Earlier issues found/mentioned but not fixed**
+No issues were missed; all known outstanding issues from this session are documented in the All Pending/In progress Issue list section.
+
+**Known issue recurrence from previous fork**
+N/A
+
+**Code Architecture**
+
+
+**Key Technical Concepts**
+- **Frontend**: React, , Tailwind CSS, Shadcn UI
+- **Backend**: FastAPI, Pydantic, Motor (async MongoDB driver), JWT
+- **Database**: MongoDB
+- **Attempted Integrations**: Google OAuth (), AWS S3 ()
+
+**key DB schema**
+- **users**: 
+- **verifications**: 
+- **user_subscriptions**: 
+
+**changes in tech stack**
+- Added  for AWS S3.
+- Added  for Google OAuth.
+- Added  for file uploads.
+
+**All files of reference**
+- : Contains all backend logic. Needs refactoring.
+- : Directory with all main UI components.
+- : Contains all frontend routing logic.
+- : Needs to be updated with AWS and Google credentials.
+
+**Areas that need refactoring**:
+The entire backend is in a single, 1000+ line  file. This should be broken down into a modular structure (e.g., separate directories/files for models, routes, and services) to improve maintainability.
+
+**key api endpoints**
+- , 
+-  (GET, POST)
+- 
+-  (Broken - saves locally)
+-  (Placeholder)
+- ,  (Incomplete)
+
+**Critical Info for New Agent**
+Your immediate priority is to fix the broken and incomplete integrations from the last session. **Do not proceed without first requesting the necessary credentials from the user for AWS and Google OAuth.** Tackle these tasks sequentially: first, fix the AWS S3 integration to enable file uploads. Second, complete the Google OAuth flow. Third, connect the Admin Dashboard to the backend. The  file is very large and a major source of technical debt; plan to refactor it after stabilizing the core features.
+
+**documents and test reports created in this job**
+- /app/session_docs/LITS_Roadmap.md
+- /app/session_docs/LITS_Verification_Strategy.md
+- /app/session_docs/LITS_Pricing_Strategy.md
+- /app/session_docs/LITS_AWS_Guide.md
+- /app/README.md
+- /app/test_reports/iteration_1.json
+
+**Last 10 User Messages and any pending HUMAN messages**
+- The user confirmed the agent should proceed with setting up AWS infrastructure if given credentials.
+- The user asked what was left to be done, prompting the creation of a roadmap.
+- The user clarified that LITS should be a standalone application, separate from any other project.
+- The user requested the implementation of Google OAuth, AWS integration for file uploads, and an Admin Dashboard.
+- The user defined a 3-phase verification system (email, ID scan, biometrics) and asked to add a Verified Matches Only filter to the subscription tiers.
+- The user requested a name change from Crew-Only Verified to the more inclusive Staff Verified Only.
+
+**Project Health Check:**
+- **Broken**:
+    - AWS S3 file upload for user verification.
+    - Google OAuth login flow.
+    - Admin dashboard functionality (data fetching and actions).
+- **Mocked**:
+    - Subscription payment processing (UI and backend models exist, but no payment gateway).
+    - AI-powered matching and scoring.
+
+**3rd Party Integrations**
+- **OpenAI GPT-5.2**: To be implemented for AI Lifestyle Scoring. Uses Emergent LLM Key.
+- **Google OAuth**: Implementation started. Requires User API Key.
+- **AWS S3**: Implementation started but broken. Requires User API Key.
+
+**Testing status**
+- **Testing agent used after significant changes**: YES
+- **Troubleshoot agent used after agent stuck in loop**: NO
+- **Test files created**: []
+- **Known regressions**: Server startup fails if AWS S3 credentials are not handled correctly; this was patched with a temporary workaround that disables the feature.
+
+**Credentials to test flow:**
+The next agent must request the following from the user to proceed:
+- 
+- 
+- 
+- 
+- 
+
+**What agent forgot to execute**
+- The previous agent failed to request necessary API keys from the user before starting implementation, leading to broken features.
+- It did not add a  to the  file for the OAuth session middleware, a critical security and functional requirement.
+- It attempted to implement three major, dependent features simultaneously instead of sequentially, increasing complexity and causing failures.
+- It did not refactor the monolithic  file, accumulating significant technical debt.</analysis>
